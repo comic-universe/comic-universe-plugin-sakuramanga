@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  * {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  
+  .font-bangers {
+    font-family: 'Bangers', cursive;
+  }
+
+  html,
+  body {
+    overscroll-behavior: auto;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: linear-gradient(135deg, #674b9c 0%, #101028 70%, #12182b 90%, #19202c 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+}

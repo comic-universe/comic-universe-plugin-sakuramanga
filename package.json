@@ -1,49 +1,31 @@
 {
   "name": "comic-universe-plugin-sakuramanga",
-  "version": "1.0.1",
-  "main": "dist/index.js",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Plugin for supporting SakuraMangas as a repository",
   "author": "Pablo Souza",
   "license": "MIT",
-  "icon": "icon.png",
-  "description": "Plugin for supporting Sakura Manga as a repository",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PabloVSouza/comic-universe-plugin-sakuramanga.git"
-  },
-  "keywords": [
-    "comic-universe",
-    "comic",
-    "universe",
-    "plugin",
-    "sakuramanga",
-    "manga"
-  ],
+  "repository": "https://github.com/PabloVSouza/comic-universe-plugin-sakuramanga",
   "scripts": {
-    "package": "rimraf --glob dist/comic-universe-plugin-sakuramanga*.tgz && npm pack --pack-destination dist",
-    "build": "tsc && npm run package",
-    "postinstall": "npm run build"
+    "dev": "next dev --webpack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "axios": "^1.7.3",
-    "cheerio": "^1.0.0-rc.12",
-    "jsdom": "^27.0.0",
-    "puppeteer": "^24.0.0",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "cheerio": "^1.1.2",
+    "next": "16.1.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@types/node": "^22.1.0",
-    "rimraf": "^6.0.1",
-    "typescript": "^5.9.2"
-  },
-  "bundledDependencies": [
-    "axios",
-    "cheerio",
-    "puppeteer"
-  ],
-  "bundleDependencies": [
-    "axios",
-    "cheerio",
-    "puppeteer"
-  ]
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^25",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
 }

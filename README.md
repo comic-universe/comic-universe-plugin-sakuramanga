@@ -1,88 +1,69 @@
-<div align="center">
-  <img src="https://github.com/pablovsouza/comic-universe/blob/main/src/renderer/assets/icon.svg?raw=true" width="200">
-  <h1>Comic Universe Plugin - SakuraManga</h1>
-  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
-  <a href="https://github.com/prisma/prisma/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
-  <a href="https://discord.gg/gPsQkDGDfc"><img alt="Discord" src="https://img.shields.io/discord/1270554232260526120?label=Discord"></a>
-  <br />
-  <br />
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://github.com/pablovsouza/comic-universe/">Main Project</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.instagram.com/opablosouza/">Instagram</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://discord.gg/gPsQkDGDfc">Discord</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://x.com/opablosouza">X (Twitter)</a>
-  <br />
-  <hr />
-</div>
+# Comic Universe Plugin - SakuraMangas
 
-## What is this?
+Plugin HTTP API for Comic Universe backed by SakuraMangas.
 
-This is a plugin for [**Comic Universe**](https://github.com/pablovsouza/comic-universe) that enables reading manga from **sakuramangas.org**.
+## Capabilities
 
-The plugin provides a web scraping interface to browse, search, and read manga from SakuraManga's website directly within the Comic Universe app.
+- `metadata`
+- `content`
 
-## ⚠️ Important Notice
+## Backend-only Requests
 
-**This plugin is currently affected by Cloudflare protection on sakuramangas.org**. The website uses anti-bot measures that prevent automated scraping. This is a common issue with many manga websites.
+All website calls happen server-side in `/api/*` routes. This avoids browser CORS issues
+in clients like Bruno/Insomnia and centralizes Sakura-specific headers/cookies in backend env vars.
 
-## ✨ Features (v1.0.0)
+### Runtime Bootstrap
 
-- **Browse manga** - Get latest manga from the homepage *(when accessible)*
-- **Search functionality** - Find manga by title *(when accessible)*
-- **Detailed information** - Synopsis, genres, author, and status
-- **Chapter listings** - Complete chapter lists with proper sorting  
-- **Page reading** - Full manga page image support
-- **Flexible scraping** - Multiple selector patterns for robust parsing
-- **Error handling** - Graceful fallbacks when specific patterns fail
-- **Cloudflare detection** - Detects and reports when website is protected
+The plugin now bootstraps Sakura protection values at runtime (home page + scripts),
+then retries protected requests automatically on first `403`.
 
-## 🔧 Current Limitations
+### Required Environment Variables
 
-Due to Cloudflare protection on sakuramangas.org:
-- The plugin may return empty results
-- Console will show "Cloudflare protection active" messages
-- Website requires JavaScript challenges that can't be automated
+Set these in your deploy/backend environment:
 
-## 🛠️ Potential Solutions
+- `SAKURA_COOKIE` (includes `PHPSESSID` and `cf_clearance`)
 
-1. **Wait for protection changes** - Sometimes sites reduce protection levels
-2. **Use proxy services** - Some proxy services can bypass basic protection
-3. **Alternative websites** - Consider using other manga sites with similar content
-4. **Manual browsing** - Use the website directly in a browser when needed
+These are optional runtime overrides (used if present, otherwise auto-discovered):
 
-### How to install this plugin?
+- `SAKURA_CSRF_TOKEN`
+- `SAKURA_CLIENT_SIGNATURE`
+- `SAKURA_VERIFICATION_KEY_1`
+- `SAKURA_VERIFICATION_KEY_2`
+- `SAKURA_PROOF`
+- `SAKURA_CHALLENGE`
 
-1. **Download the plugin package**:
-   - Download the latest `.tgz` file from the [releases page](https://github.com/PabloVSouza/comic-universe-plugin-sakuramanga/releases)
-   - Or clone this repository and run `npm run build` to generate the package
+Optional:
 
-2. **Install in Comic Universe**:
-   Comic Universe (version 2.0+) looks for plugins in the following folder:
-   - **macOS**: `~/library/application-support/comic-universe/plugins`
-   - **Windows**: `%appdata%/comic-universe/plugins`
+- `SAKURA_BASE_URL` (default `https://sakuramangas.org`)
+- `SAKURA_USER_AGENT`
 
-3. **Extract the plugin**:
-   - Extract the plugin folder to the plugins directory
-   - The app should automatically recognize and load the plugin
+## Endpoints
 
-### Development
+- `POST /api/getList` - default list
+- `POST /api/search` - body `{ search }`
+- `POST /api/getDetails` - body `{ siteId }`
+- `POST /api/getChapters` - body `{ siteId }`
+- `POST /api/getPages` - body `{ chapterSiteId }`
+- `POST /api/downloadChapter` - stub
+- `GET /api/metadata`
 
-To modify or contribute to this plugin:
+## Dev
 
 ```bash
-git clone https://github.com/PabloVSouza/comic-universe-plugin-sakuramanga.git
-cd comic-universe-plugin-sakuramanga
 npm install
-npm run build
+npm run dev
 ```
 
-### What if i'm stuck?
+Cloudflare session cookies are still required:
 
-Feel free to reach me on the social networks provided above, as well as in our discord server.
+- `SAKURA_COOKIE` (or `SAKURA_PHPSESSID` + `SAKURA_CF_CLEARANCE`)
 
-### I'm done developing my plugin, how do i publish it?
+## Install in Comic Universe
 
-Reach me in the discord server, on the channel **#plugin-submission**.
+Use deep link:
+
+```text
+comic-universe-tauri://plugin/install?url=<PLUGIN_BASE_URL>/api&metadataUrl=<PLUGIN_BASE_URL>/api/metadata&name=MangaDex&tag=mangadex
+
+comic-universe-tauri://plugin/install?url=<PLUGIN_BASE_URL>/api&metadataUrl=<PLUGIN_BASE_URL>/api/metadata&name=SakuraMangas&tag=sakuramangas
+```
