@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Roboto } from 'next/font/google'
+import { Bangers, Roboto } from 'next/font/google'
 import './globals.css'
 
 const roboto = Roboto({
@@ -7,6 +7,12 @@ const roboto = Roboto({
   style: ['normal', 'italic'],
   subsets: ['latin'],
   variable: '--font-roboto'
+})
+
+const bangers = Bangers({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-bangers'
 })
 
 export const metadata: Metadata = {
@@ -24,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} antialiased`}>
+      <body className={`${roboto.variable} ${bangers.variable} antialiased`}>
         <div
           className="fixed inset-0 w-full h-full -z-10"
           style={{
